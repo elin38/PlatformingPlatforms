@@ -255,9 +255,5 @@ class Platformer extends Phaser.Scene {
             my.text.interact.visible = false;
             my.text.collectables.visible = false;
         }
-
-        // if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
-        //     this.scene.start("secretScene");
-        // }
     }
 }
