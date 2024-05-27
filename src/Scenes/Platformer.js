@@ -21,8 +21,6 @@ class Platformer extends Phaser.Scene {
         this.map = this.add.tilemap("platformer-level-1", 18, 18, 120, 20);
 
         // Add a tileset to the map
-        // First parameter: name we gave the tileset in Tiled
-        // Second parameter: key for the tilesheet (from this.load.image in Load.js)
         this.tileset = this.map.addTilesetImage("foodie_tilemap_packed", "tilemap_tiles");
 
         // Create a layer
@@ -57,10 +55,6 @@ class Platformer extends Phaser.Scene {
             frame: 43
         });
         
-
-        // TODO: Add turn into Arcade Physics here
-        // Since createFromObjects returns an array of regular Sprites, we need to convert 
-        // them into Arcade Physics sprites (STATIC_BODY, so they don't move) 
         this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
         this.physics.world.enable(this.token, Phaser.Physics.Arcade.STATIC_BODY);
         this.physics.world.enable(this.end_Token, Phaser.Physics.Arcade.STATIC_BODY);
@@ -93,7 +87,7 @@ class Platformer extends Phaser.Scene {
 
         this.physics.add.overlap(my.sprite.player, this.tokenGroup, (obj1, obj2) => {
             obj2.destroy(); // remove coin on overlap
-            this.sound.play("collect", {
+            this.sound.play("collect2", {
                 volume: 0.15   // Can adjust volume using this, goes from 0 to 1
             });
             this.nigiriCount += 1;
@@ -104,7 +98,7 @@ class Platformer extends Phaser.Scene {
             my.text.interact.x = obj2.x-20;
             my.text.interact.y = obj2.y-30;
             if(Phaser.Input.Keyboard.JustDown(this.eKey) && this.nigiriCount == 3) {
-                this.sound.play("collect", {
+                this.sound.play("finish", {
                     volume: 0.15   // Can adjust volume using this, goes from 0 to 1
                 });
                 this.scene.start("gameOverScene");
@@ -121,10 +115,10 @@ class Platformer extends Phaser.Scene {
             my.text.interact.x = obj2.x-20;
             my.text.interact.y = obj2.y-30;
             if(Phaser.Input.Keyboard.JustDown(this.eKey) && this.nigiriCount == 3 && this.sushiCount == 13) {
-                this.sound.play("collect", {
+                this.sound.play("finish", {
                     volume: 0.15   // Can adjust volume using this, goes from 0 to 1
                 });
-                this.scene.start("gameOverScene");
+                this.scene.start("secretScene");
             } else {
                 my.text.collectables.visible = true;
                 my.text.collectables.x = my.sprite.player.x-42;
@@ -170,7 +164,7 @@ class Platformer extends Phaser.Scene {
         //camera code
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         // console.log(this.map.widthInPixels, this.map.heightInPixels);
-        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25);
         this.cameras.main.setDeadzone(5, 5);
         this.cameras.main.setZoom(this.SCALE);
 
@@ -202,13 +196,11 @@ class Platformer extends Phaser.Scene {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
             my.sprite.player.resetFlip();
             my.sprite.player.anims.play('walk', true);
-            // TODO: add particle following code here
             my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
 
             my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
 
             // Only play smoke effect if touching the ground
-
             if (my.sprite.player.body.blocked.down) {
 
                 my.vfx.walking.start();
@@ -219,7 +211,6 @@ class Platformer extends Phaser.Scene {
             my.sprite.player.setAccelerationX(this.ACCELERATION);
             my.sprite.player.setFlip(true, false);
             my.sprite.player.anims.play('walk', true);
-            // TODO: add particle following code here
             my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
 
             my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
@@ -234,12 +225,11 @@ class Platformer extends Phaser.Scene {
             my.sprite.player.setAccelerationX(0);
             my.sprite.player.setDragX(this.DRAG);
             my.sprite.player.anims.play('idle');
-            // TODO: have the vfx stop playing
+            //have the vfx stop playing
             my.vfx.walking.stop();
         }
 
         // player jump
-        // note that we need body.blocked rather than body.touching b/c the former applies to tilemap tiles and the latter to the "ground"
         if(!my.sprite.player.body.blocked.down) {
             my.sprite.player.anims.play('jump');
         }
@@ -266,8 +256,8 @@ class Platformer extends Phaser.Scene {
             my.text.collectables.visible = false;
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
-            this.scene.start("secretScene");
-        }
+        // if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
+        //     this.scene.start("secretScene");
+        // }
     }
 }

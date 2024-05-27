@@ -5,9 +5,9 @@ class GameOver extends Phaser.Scene {
 
     create() {
         // Add "Game Over" text
-        this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 50, 'Game Over', {
+        this.add.text(this.cameras.main.centerX, this.cameras.main.centerY - 50, 'Fin. Thanks for Playing!', {
             fontSize: '64px',
-            fill: '#ff0000'
+            fill: '#0892d0'
         }).setOrigin(0.5);
 
         // Add restart button

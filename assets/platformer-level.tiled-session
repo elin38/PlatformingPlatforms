@@ -3,8 +3,9 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "platformer-level-s.tmj",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         "": {
@@ -20,8 +21,8 @@
             "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 589.9999999999999,
-                "y": 128
+                "x": 916.6666666666665,
+                "y": 198.66666666666663
             }
         },
         "platformer-level-1.tmx#foodie_tilemap_packed": {
@@ -33,10 +34,10 @@
                 2
             ],
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 399.66666666666674,
-                "y": 243.33333333333331
+                "x": 278.33333333333326,
+                "y": 260.66666666666663
             }
         },
         "platformer-level-s.tmj#foodie_tilemap_packed": {
@@ -51,10 +52,13 @@
     "map.tileWidth": 18,
     "map.width": 40,
     "openFiles": [
+        "platformer-level-1.tmx",
+        "platformer-level-s.tmj"
     ],
     "project": "platformer-level.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "platformer-level-1.tmx",
         "platformer-level-s.tmj"
     ],
     "tileset.embedInMap": true,

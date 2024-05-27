@@ -19,8 +19,6 @@ class SecretLevel extends Phaser.Scene {
         this.map = this.add.tilemap("platformer-level-s", 18, 18, 40, 20);
 
         // Add a tileset to the map
-        // First parameter: name we gave the tileset in Tiled
-        // Second parameter: key for the tilesheet (from this.load.image in Load.js)
         this.tileset = this.map.addTilesetImage("foodie_tilemap_packed", "tilemap_tiles");
 
         // Create a layer
@@ -34,7 +32,7 @@ class SecretLevel extends Phaser.Scene {
         this.coins = this.map.createFromObjects("Objects", {
             name: "coin",
             key: "tilemap_sheet",
-            frame: 15
+            frame: 14
         });
 
         this.end_Token = this.map.createFromObjects("Objects", {
@@ -45,15 +43,10 @@ class SecretLevel extends Phaser.Scene {
 
         
 
-        // TODO: Add turn into Arcade Physics here
-        // Since createFromObjects returns an array of regular Sprites, we need to convert 
-        // them into Arcade Physics sprites (STATIC_BODY, so they don't move) 
         this.physics.world.enable(this.coins, Phaser.Physics.Arcade.STATIC_BODY);
         this.physics.world.enable(this.end_Token, Phaser.Physics.Arcade.STATIC_BODY);
         
 
-        // Create a Phaser group out of the array for collectables
-        // This will be used for collision detection below.
         this.coinGroup = this.add.group(this.coins);
         this.endTokenGroup = this.add.group(this.end_Token);
         
@@ -69,18 +62,18 @@ class SecretLevel extends Phaser.Scene {
         this.physics.add.overlap(my.sprite.player, this.coinGroup, (obj1, obj2) => {
             obj2.destroy(); // remove coin on overlap
             this.sound.play("collect", {
-                volume: 0.15   // Can adjust volume using this, goes from 0 to 1
+                volume: 0.15  
             });
             this.sushiCount += 1;
         });
 
         this.physics.add.overlap(my.sprite.player, this.endTokenGroup, (obj1, obj2) => {
             my.text.interact.visible = true;
-            my.text.interact.x = obj2.x-20;
+            my.text.interact.x = obj2.x-40;
             my.text.interact.y = obj2.y-30;
             if(Phaser.Input.Keyboard.JustDown(this.eKey)) {
-                this.sound.play("collect", {
-                    volume: 0.15   // Can adjust volume using this, goes from 0 to 1
+                this.sound.play("finish", {
+                    volume: 0.15 
                 });
                 this.scene.start("gameOverScene");
             }
@@ -122,14 +115,13 @@ class SecretLevel extends Phaser.Scene {
 
         //camera code
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        // console.log(this.map.widthInPixels, this.map.heightInPixels);
-        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25);
         this.cameras.main.setDeadzone(5, 5);
         this.cameras.main.setZoom(this.SCALE);
 
         //add text:
         my.text.interact =
-        this.add.text(my.sprite.player.x, my.sprite.player.y, "Press \"E\"", {
+        this.add.text(my.sprite.player.x, my.sprite.player.y, "Press \"E\" to end", {
             fontFamily: 'Times, serif',
             fontSize: 12,
             wordWrap: {
@@ -147,13 +139,11 @@ class SecretLevel extends Phaser.Scene {
             my.sprite.player.setAccelerationX(-this.ACCELERATION);
             my.sprite.player.resetFlip();
             my.sprite.player.anims.play('walk', true);
-            // TODO: add particle following code here
             my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
 
             my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
 
             // Only play smoke effect if touching the ground
-
             if (my.sprite.player.body.blocked.down) {
 
                 my.vfx.walking.start();
@@ -164,9 +154,7 @@ class SecretLevel extends Phaser.Scene {
             my.sprite.player.setAccelerationX(this.ACCELERATION);
             my.sprite.player.setFlip(true, false);
             my.sprite.player.anims.play('walk', true);
-            // TODO: add particle following code here
             my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
-
             my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
 
             // Only play smoke effect if touching the ground
@@ -179,12 +167,10 @@ class SecretLevel extends Phaser.Scene {
             my.sprite.player.setAccelerationX(0);
             my.sprite.player.setDragX(this.DRAG);
             my.sprite.player.anims.play('idle');
-            // TODO: have the vfx stop playing
             my.vfx.walking.stop();
         }
 
         // player jump
-        // note that we need body.blocked rather than body.touching b/c the former applies to tilemap tiles and the latter to the "ground"
         if(!my.sprite.player.body.blocked.down) {
             my.sprite.player.anims.play('jump');
         }
@@ -196,7 +182,7 @@ class SecretLevel extends Phaser.Scene {
             my.vfx.jumping.setParticleSpeed(0, 0);
             my.vfx.jumping.start();
             this.sound.play("jump", {
-                volume: 0.25   // Can adjust volume using this, goes from 0 to 1
+                volume: 0.25
             });
         } 
         else {
@@ -209,8 +195,8 @@ class SecretLevel extends Phaser.Scene {
             my.text.interact.visible = false;
         }
 
-        if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
-            this.scene.restart();
-        }
+        // if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
+        //     this.scene.restart();
+        // }
     }
 }
